@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Write a new post - The Margin</title>
+  <link rel="stylesheet" href="last.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">The Margin</div>
+    <nav class="nav-links">
+      <a href="#posts">Posts</a>
+      <button href="#write" class="btn-write">Write</button>
+      <a href="/image/Image (Margot Ellison) (1).png" alt="image"><img src="/image/Image (Margot Ellison) (1).png" alt="image"></a>
+    </nav>
+
+  </header>
+  <main class="container">
+    <div class="form-header">
+      <h1>Write a new post</h1>
+      <p class="subtitle">Share an idea, an essay, a reflection.</p>
+    </div>
+
+    <form class="post-form">
+      <div class="form-group">
+        <label for="title">TITLE</label>
+        <input type="text" id="title" placeholder="Something worth reading">
+      </div>
+      <div class="form-group">
+        <label for="excerpt">
+          EXCEPT <span class="label-note">(optional — generated from content if blank)</span>
+        </label>
+        <input type="text" id="excerpt" placeholder="A sentence or two that draws the reader in.">
+      </div>
+      <div class="form-rom">
+        <div class="form-group">
+          <label for="category">CATEGORY</label>
+          <select id="category">
+            <option value="culture">Culture</option>
+             <option value="bible">bible</option>
+              <option value="ezzzy">ezzzy</option>
+               <option value="GAME">GAME</option>
+                <option value="chat">chat</option>
+            <option value="technology">Technology</option>
+            <option value="design">Design</option>
+            
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="read-time">READ TIME (MINUTES)</label>
+          <input type="number" id="read-time" value="5" min="1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="content">CONTENT</label>
+        <textarea id="content" rows="25" placeholder="Start writing..."></textarea>
+        <span></span>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-publish">Publish post</button>
+        <a href="#" class="btn-cancel">Cancel</a>
+      </div>
+    </form>
+  </main>
+  <footer class="footer">
+    <div class="footer-logo">The Margin</div>
+    <div class="footer-tagline">A place for ideas worth keeping.</div>
+    <a href="#" class="sign-out">Sign out</a>
+  </footer>
+
+</body>
+</html>

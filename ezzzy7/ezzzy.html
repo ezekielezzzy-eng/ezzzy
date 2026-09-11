@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div>The Margin</div>
+        <nav>
+            <a href="../ezzzy5/last.html">Post</a>
+            <a href="../ezzzy 2/loggin.html" class="tag">Sign in</a>
+            <button href="../ezzzy/reg.html" class="buttom" >Get started</button>
+        </nav>
+    </header>
+    <div class="hero">
+        <p class="hero-card">
+            INDEPEDENT WRITING
+        </p>
+        <h1 class="hero-text">
+            ideas worth sitting with.
+        </h1>
+        <p class="hero-letter">
+            Essay on culture,techology,and the examined.No algorithims,no hot takes
+
+        </p>
+       <div class="culture">
+
+            <img class="table" src="/image/Image (The Quiet Discipline of Reading Without Purpose).png" alt="image">
+            <div >
+                 <p class="work">
+                    CULTURE
+                 </p>
+                <h2 class="work-text">
+                    The Quiet Discipline Of Reading Without Purpose
+                </h2>
+                <p class="work-letter">
+                    in an age of productivity optimization,there is 
+                    something quietly radical about picking up a 
+                    book with no agenda beyond the pleasure of it.
+
+                </p>
+                <div class="image" >
+
+                        <img src="/image/Image (Margot Ellison) (1).png" alt="">
+                        <p>Margot Ellison . August 18,2026 . 4 min read</p>
+
+
+                </div>
+
+            </div>
+
+       </div>
+    </div>
+
+    <section>
+        <div>
+            <p class="article-park">
+                MORE ESSAYS
+            </p>
+        </div>
+        
+        <div class="articles">
+
+                <div class="article-card">
+                
+                <img src="/image/BlogListing (1).png" alt="" class="card-image">
+
+                <h2 class="card-category">
+                    TECHNOLOGY
+                </h2>
+
+                <h1 class="card-title">
+                    What Software Engineers Get 
+                    Wrong About Writing
+                </h1>
+
+                <p class="card-content">
+                    code and prose share a surprising number of 
+                    virtues. clarity,precision,economy.But 
+                </p>
+                <div class="card-author">
+                    <img src="/image/Image (Thomas Vael) (1).png" alt="">
+                    <p>
+                        Thomas Vael · 5 min
+                    </p>
+                </div>
+
+                </div>
+
+            <div class="article-card">
+                
+                <img src="/image/Image (On Cities That Reward Slowness) (2).png" alt="" class="card-image">
+
+                <h2 class="card-category">
+                    Travel
+                </h2>
+
+                <h1 class="card-title">
+                  On Cities That Reward Slowness
+                </h1>
+
+                <p class="card-content">
+                    Some cities are built for speed. Others reveal themselves only to those patient enough to walk every street at least once.
+                </p>
+                <div class="card-author">
+                    <img src="images/Image (Margot Ellison) (1).png" alt="">
+                    <p>
+                        Thomas Vael · 5 min
+                    </p>
+                </div>
+
+                </div>
+
+                            <div class="article-card">
+                
+                <img src="/image/BlogListing (2).png=" alt="" class="card-image">
+
+                <h2 class="card-category">
+                    Ideas
+                </h2>
+
+                <h1 class="card-title">
+                    The Surprising Ethics of Making Things
+                </h1>
+
+                <p class="card-content">
+                    Every object you make is a small argument about how the world should be. The ethics of craft are hidden in plain sight.
+                </p>
+                <div class="card-author">
+                    <img src="/images/Image (Thomas Vael) (1).png" alt="">
+                    <p>
+                        Thomas Vael · 5 min
+                    </p>
+                </div>
+
+                </div>
+
+
+        </div>
+    </section>
+    
+    <footer class="footer-log">
+        <div class="text">
+            The margin
+        </div>
+        <p>
+            A place for. ideas worth keeping.
+        </p>
+    </footer>
+    <script  src="../ezzzy6/server.js"></script>
+    <script>
+        <div id="postsList"></div> 
+        
+        async function renderPosts() { 
+            const container = document.getElementById("postsList");
+            container.innerHTML = "Loading posts...";
+            
+            try {
+                 const page = await getAllPosts(0, 10);
+                
+                 if (page.content.length === 0) {
+                     container.innerHTML = "<p>No posts yet.</p>";
+                     return;
+                    }
+                      container.innerHTML = page.content
+                       .map(
+                         (post) => `
+                          <article class="post-card"> 
+                            ${post.imageUrl ? `<img src="${escapeHtml(post.imageUrl)}" alt="">` :
+         ""} 
+                    <span class="category">${escapeHtml(post.category)}</span>
+                     <h2><a 
+        href="post.html?id=${post.id}">${escapeHtml(post.title)}</a></h2>
+                    <p>${escapeHtml(post.content.slice(0, 150))}...</p> 
+                    <small>By ${escapeHtml(post.author.fullName)} · ${new 
+        Date(post.createdAt).toLocaleDateString()}</small>
+                </article>
+            `
+            ) 
+            .join("");
+         } catch (err) {
+           container.innerHTML = `<p>Failed to load posts: ${err.message}</p>`;
+         } 
+
+        } renderPosts();
+         // Always escape user-supplied text before inserting it as HTML,
+         //  // so a post title/content can never inject a <script> tag into your page. 
+        function escapeHtml(str) {
+             const div = document.createElement("div");
+             div.textContent = str;
+              return div.innerHTML;
+             }
+    </script>
+
+
+</body>
+</html>

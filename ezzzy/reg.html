@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>register </title>
+    <link rel="stylesheet" href="reg.css">
+</head>
+<body>
+    <header class="navbar">
+    <div class="logo">the Margin</div>
+    <nav class="na">
+        <a href="../ezzzy5/last.html">Posts</a>
+        <a href="../ezzzy 2/loggin.html">Sign in</a>
+        <button href="../ezzzy/reg.html">Get started</button>
+    </nav>
+    </header>
+    
+             <section class="inform">
+                <form id="registerForm">
+                    <h1 class="wel">Start Writing.</h1>
+                    <p class="and">Create an account and publish your first essay.</p>
+                    <label class="YOUR NAME">YOUR NAME</label>
+                    <input id="fullName" type="text" placeholder="EZZZY"></input>
+                    <label class="Email">Email</label>
+                    <input id="email" type="Email" placeholder="09070639567@gmail.com">
+                    <label class="Password">Password</label>
+                    <input id="password" type="Password" placeholder="12345678">
+                    <button id="LOGING-IN" type="submit">create account</button>
+                    <label class="type">already have an account? <a class="sign-in" href="">sign-in </a></label>
+                </form>
+
+             </section>
+    <footer class="footer">
+        <div class="footer-log">the margin</div>
+        <div class="footer text">
+            a place for ideas worth keeping.
+        </div>
+    </footer>
+
+    <script src="../ezzzy6/server.js"></script>
+    <script>
+        async function registerStudent(fullName, email, password) {
+         const data = await apiRequest("/api/auth/register", {
+             method: "POST",
+              body: JSON.stringify({ fullName, email, password, department: "CS", level:"300" }),
+              }); // data = { token, tokenType, student: {...} } 
+               localStorage.setItem("token", data.token);
+               localStorage.setItem("student", JSON.stringify(data.student));
+                
+         return data.student;
+        }
+        
+       document.getElementById("registerForm").addEventListener("submit", async (e) => {
+         e.preventDefault(); // stop the page from reloading
+         try {
+
+            document.getElementById("LOGING-IN").textContent = "Registering...";
+            document.getElementById("LOGING-IN").ariaDisabled = true;
+         const student = await registerStudent(
+                document.getElementById("fullName").value,
+                document.getElementById("email").value,
+                document.getElementById("password").value
+            );
+                  alert(`Welcome, ${student.fullName}! You're now logged in.`);
+                   window.location.href = "../ezzzy7/ezzzy.html"; // go to the homepage
+                    } catch (err) {
+                    alert(err.message); // e.g. "A student with this email already exists" 
+                    } finally{
+                        document.getElementById("LOGING-IN").textContent= "create account";
+                        document.getElementById("LOGING-IN").ariaDisabled=false;
+                    } 
+                }); 
+    </script>
+</body>
+</html>
+
