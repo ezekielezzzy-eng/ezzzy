@@ -7,7 +7,6 @@
 
   function applyIntroClasses() {
     var selectors = [
-      ".hero-card",
       ".hero-text",
       ".hero-letter",
       ".wel",
@@ -27,7 +26,7 @@
       });
     });
 
-    document.querySelectorAll(".buttom, .btn-write, .btn-publish, .hero-card").forEach(function (element) {
+    document.querySelectorAll(".buttom, .btn-write, .btn-publish").forEach(function (element) {
       element.classList.add("pulse-glow");
     });
 

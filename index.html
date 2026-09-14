@@ -206,6 +206,7 @@
                              year: "numeric"
                          }) : "Recently";
                          const readTime = Number(post.readTime) || 4;
+                         const postUrl = `ezzzy4/post.html?id=${encodeURIComponent(post.id)}`;
                          const initials = authorName
                            .split(/\s+/)
                            .filter(Boolean)
@@ -215,12 +216,16 @@
 
                          return `
                            <article class="article-card post-card">
-                             <img class="card-image post-card-image" src="${imageSrc}" alt="${title}">
+                             <a class="card-media-link" href="${postUrl}" aria-label="Read ${title}">
+                               <img class="card-image post-card-image" src="${imageSrc}" alt="${title}">
+                             </a>
                              <h2 class="card-category">${category}</h2>
                              <h1 class="card-title">
-                               <a class="card-link" href="ezzzy4/post.html?id=${encodeURIComponent(post.id)}">${title}</a>
+                               <a class="card-link" href="${postUrl}">${title}</a>
                              </h1>
-                             <p class="card-content">${excerpt}${(post.content || "").trim().length > 150 ? "..." : ""}</p>
+                             <a class="card-content-link" href="${postUrl}">
+                               <p class="card-content">${excerpt}${(post.content || "").trim().length > 150 ? "..." : ""}</p>
+                             </a>
                              <div class="card-author">
                                <div class="card-avatar">${initials}</div>
                                <p>${authorName} · ${createdDate} · ${readTime} min read</p>

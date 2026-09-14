@@ -65,10 +65,9 @@
                 document.getElementById("email").value,
                 document.getElementById("password").value
             );
-                  alert(`Welcome, ${student.fullName}! You're now logged in.`);
                    window.location.href = "../index.html"; // go to the homepage
                     } catch (err) {
-                    alert(err.message); // e.g. "A student with this email already exists" 
+                    console.error(err);
                     } finally{
                         document.getElementById("LOGING-IN").textContent= "create account";
                         document.getElementById("LOGING-IN").disabled = false;

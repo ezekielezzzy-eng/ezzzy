@@ -49,8 +49,8 @@ async function apiRequest(endpoint, options = {}, authRequired = false) {
 
 async function getAllPosts(page = 0, size = 10) {
    const candidates = [
-      `/api/post?page=${page}&size=${size}&_=${Date.now()}`,
-      `/api/posts?page=${page}&size=${size}&_=${Date.now()}`
+      `/api/posts?page=${page}&size=${size}&_=${Date.now()}`,
+      `/api/post?page=${page}&size=${size}&_=${Date.now()}`
    ];
 
    let lastError;
@@ -79,15 +79,19 @@ async function getAllPosts(page = 0, size = 10) {
 
 async function getPostById(id) {
    const candidates = [
-      `/api/post/${encodeURIComponent(id)}`,
-      `/api/posts/${encodeURIComponent(id)}`
+      `/api/posts/${encodeURIComponent(id)}`,
+      `/api/post/${encodeURIComponent(id)}`
    ];
 
    let lastError;
 
    for (const endpoint of candidates) {
       try {
-         return await apiRequest(endpoint);
+         const result = await apiRequest(endpoint);
+         const post = result?.post || result?.data?.post || result?.data || result;
+         if (post && typeof post === "object") {
+            return post;
+         }
       } catch (error) {
          lastError = error;
       }

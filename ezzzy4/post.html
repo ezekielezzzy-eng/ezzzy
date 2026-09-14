@@ -85,8 +85,12 @@
                 }
                 document.title = post.title || "The Margin";
             } catch (error) {
+                const message = (error && error.message) || "Unable to load this post right now.";
+                const isAuthIssue = /401|unauthorized|authentication|token/i.test(message);
+
                 articleBody.innerHTML = `
-                    <p>Unable to load this post right now.</p>
+                    <p>${message}</p>
+                    ${isAuthIssue ? '<a href="../ezzzy%202/ezzzy/loggin.html" class="back-link">Sign in to continue</a>' : ''}
                     <button type="button" id="retryPost">Try again</button>
                 `;
 
