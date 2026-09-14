@@ -159,22 +159,84 @@
 
     <script src="ezzzy6/server.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const isLoggedIn = localStorage.getItem("isLoggedIn") === "true" || !!localStorage.getItem("token");
-            const writeLink = document.getElementById("writeLink");
-            const signinLink = document.getElementById("signinLink");
-            const getStartedLink = document.getElementById("getStartedLink");
-
-            if (isLoggedIn) {
-                if (signinLink) signinLink.classList.add("hidden");
-                if (getStartedLink) getStartedLink.classList.add("hidden");
-                if (writeLink) writeLink.classList.remove("hidden");
-            } else {
-                if (writeLink) writeLink.classList.add("hidden");
-                if (signinLink) signinLink.classList.remove("hidden");
-                if (getStartedLink) getStartedLink.classList.remove("hidden");
+        (function forceHeaderAuth() {
+            function getLandingPagePath() {
+                return window.location.pathname.toLowerCase().includes('/ezzzy5/') ? '../index.html' : 'index.html';
             }
-        });
+
+            function isAuthenticated() {
+                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || localStorage.getItem('token') || localStorage.getItem('user');
+                return !!isLoggedIn;
+            }
+
+            function applyHeaderState() {
+                const writeLink = document.getElementById('writeLink');
+                const signinLink = document.getElementById('signinLink');
+                const getStartedLink = document.getElementById('getStartedLink');
+                const loggedIn = isAuthenticated();
+
+                if (writeLink) {
+                    writeLink.style.setProperty('display', loggedIn ? 'flex' : 'none', 'important');
+                    writeLink.style.setProperty('background-color', '#b8651a', 'important');
+                    writeLink.style.setProperty('color', '#ffffff', 'important');
+                    writeLink.classList.toggle('hidden', !loggedIn);
+                }
+
+                if (signinLink) {
+                    signinLink.style.setProperty('display', loggedIn ? 'none' : 'flex', 'important');
+                    signinLink.classList.toggle('hidden', loggedIn);
+                }
+
+                if (getStartedLink) {
+                    getStartedLink.style.setProperty('display', loggedIn ? 'none' : 'flex', 'important');
+                    getStartedLink.classList.toggle('hidden', loggedIn);
+                }
+            }
+
+            function enforceProtectedRoutes() {
+                const protectedPaths = ['/create-post.html', '/write.html', '/ezzzy5/last.html', '/ezzzy5/create-post.html'];
+                const currentPath = window.location.pathname.toLowerCase();
+                const isProtectedRoute = protectedPaths.some((route) => currentPath.endsWith(route));
+
+                if (isProtectedRoute && !isAuthenticated()) {
+                    window.location.replace(getLandingPagePath());
+                    return true;
+                }
+
+                return false;
+            }
+
+            function bindProtectedHandlers() {
+                const writeLink = document.getElementById('writeLink');
+
+                if (writeLink && writeLink.dataset.bound !== 'true') {
+                    writeLink.addEventListener('click', function (event) {
+                        if (!isAuthenticated()) {
+                            event.preventDefault();
+                            window.location.replace(getLandingPagePath());
+                        }
+                    });
+                    writeLink.dataset.bound = 'true';
+                }
+            }
+
+            function run() {
+                if (enforceProtectedRoutes()) {
+                    return;
+                }
+
+                applyHeaderState();
+                bindProtectedHandlers();
+            }
+
+            run();
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    run();
+                }, { once: true });
+            }
+        })();
 
         async function renderPosts() { 
             const container = document.getElementById("postsList");

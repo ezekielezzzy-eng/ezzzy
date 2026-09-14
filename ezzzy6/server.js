@@ -1,11 +1,28 @@
 const BASE_URL = "https://lamzytechnewsapi.onrender.com";
+
+function getStoredToken() {
+   const token = localStorage.getItem("token") || localStorage.getItem("authToken") || "";
+   return token.trim();
+}
+
+function clearStoredAuth() {
+   localStorage.removeItem("token");
+   localStorage.removeItem("authToken");
+   localStorage.removeItem("student");
+   localStorage.removeItem("user");
+}
+
 async function apiRequest(endpoint, options = {}, authRequired = false) {
-   const headers = { "Content-Type": "application/json", ...options.headers };
-   const token = localStorage.getItem("token");
+   const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+   const token = getStoredToken();
 
    if (authRequired && !token) {
-      throw new Error("You must be logged in to do this.");
+      const error = new Error("Please sign in to continue.");
+      error.status = 401;
+      error.code = "AUTH_REQUIRED";
+      throw error;
    }
+
    if (token) {
       headers.Authorization = `Bearer ${token}`;
    }
@@ -37,13 +54,21 @@ async function apiRequest(endpoint, options = {}, authRequired = false) {
    } catch {
       result = { message: responseText };
    }
-   if (!response.ok || result.success === false) {
-      if (response.status === 401) {
-         localStorage.removeItem("token");
-         localStorage.removeItem("student");
-      }
-      throw new Error(result.message || `Request failed (${response.status}).`);
+
+   if (response.status === 401) {
+      clearStoredAuth();
+      const error = new Error(result.message || "Please sign in to view this content.");
+      error.status = 401;
+      error.code = "UNAUTHORIZED";
+      throw error;
    }
+
+   if (!response.ok || result.success === false) {
+      const error = new Error(result.message || `Request failed (${response.status}).`);
+      error.status = response.status;
+      throw error;
+   }
+
    return result.data ?? result;
 }
 
@@ -78,6 +103,17 @@ async function getAllPosts(page = 0, size = 10) {
 }
 
 async function getPostById(id) {
+   try {
+      const posts = await getAllPosts(0, 200);
+      const post = posts.find((entry) => String(entry.id) === String(id));
+
+      if (post) {
+         return post;
+      }
+   } catch (error) {
+      // Fall through to the original endpoint logic below only if the list route also fails.
+   }
+
    const candidates = [
       `/api/posts/${encodeURIComponent(id)}`,
       `/api/post/${encodeURIComponent(id)}`

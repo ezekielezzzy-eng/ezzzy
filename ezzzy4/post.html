@@ -85,8 +85,12 @@
                 }
                 document.title = post.title || "The Margin";
             } catch (error) {
-                const message = (error && error.message) || "Unable to load this post right now.";
-                const isAuthIssue = /401|unauthorized|authentication|token/i.test(message);
+                const rawMessage = (error && error.message) || "Unable to load this post right now. Try again.";
+                const status = Number(error?.status || 0);
+                const isAuthIssue = status === 401 || /401|unauthorized|authentication|token/i.test(rawMessage);
+                const message = isAuthIssue
+                    ? "Please sign in to view this content."
+                    : rawMessage;
 
                 articleBody.innerHTML = `
                     <p>${message}</p>
