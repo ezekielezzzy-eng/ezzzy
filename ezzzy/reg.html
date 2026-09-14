@@ -7,39 +7,108 @@
     <link rel="stylesheet" href="reg.css">
 </head>
 <body>
-    <header class="navbar">
-    <div class="logo">the Margin</div>
-    <nav class="na">
-        <a href="../index.html">Posts</a>
-        <a href="../ezzzy 2/ezzzy/loggin.html">Sign in</a>
-        <a href="../ezzzy/reg.html">Get started</a>
-    </nav>
-    </header>
-    
-             <section class="inform">
-                <form id="registerForm">
-                    <h1 class="wel">Start Writing.</h1>
-                    <p class="and">Create an account and publish your first essay.</p>
-                    <label class="YOUR NAME">YOUR NAME</label>
-                    <input id="fullName" type="text" placeholder="EZZZY"></input>
-                    <label class="Email">Email</label>
-                    <input id="email" type="Email" placeholder="09070639567@gmail.com">
-                    <label class="Password">Password</label>
-                    <input id="password" type="Password" placeholder="12345678">
-                    <button id="LOGING-IN" type="submit">create account</button>
-                    <label class="type">already have an account? <a class="sign-in" href="">sign-in </a></label>
-                </form>
+    <div id="authWall" class="auth-wall" aria-modal="true" role="dialog">
+        <div class="auth-modal">
+            <p class="auth-label">Welcome to The Margin</p>
+            <h2>Choose how you want to continue.</h2>
 
-             </section>
-    <footer class="footer">
-        <div class="footer-log">the margin</div>
-        <div class="footer text">
-            a place for ideas worth keeping.
+            <div class="auth-actions">
+                <button id="continueRegister" type="button" class="action-btn primary">Register</button>
+                <a href="../ezzzy%202/ezzzy/loggin.html" class="action-btn secondary">Sign Up</a>
+            </div>
+
+            <p class="auth-toggle-text">
+                Already have an account?
+                <a href="../ezzzy%202/ezzzy/loggin.html" class="auth-signin">Sign in</a>
+            </p>
         </div>
-    </footer>
+    </div>
+
+    <div class="page-wrap">
+        <header class="navbar">
+        <div class="logo">the Margin</div>
+        <nav class="na">
+            <a href="../index.html">Posts</a>
+            <a href="../ezzzy 2/ezzzy/loggin.html">Sign in</a>
+            <a href="../ezzzy/reg.html">Get started</a>
+        </nav>
+        </header>
+        
+                 <section class="inform">
+                    <form id="registerForm">
+                        <h1 class="wel">Start Writing.</h1>
+                        <p class="and">Create an account and publish your first essay.</p>
+                        <label class="YOUR NAME">YOUR NAME</label>
+                        <input id="fullName" type="text" placeholder="EZZZY"></input>
+                        <label class="Email">Email</label>
+                        <input id="email" type="Email" placeholder="09070639567@gmail.com">
+                        <label class="Password">Password</label>
+                        <input id="password" type="Password" placeholder="12345678">
+                        <button id="LOGING-IN" type="submit">create account</button>
+                        <label class="type">already have an account? <a class="sign-in" href="../ezzzy%202/ezzzy/loggin.html">sign-in </a></label>
+                    </form>
+
+                 </section>
+        <footer class="footer">
+            <div class="footer-log">the margin</div>
+            <div class="footer text">
+                a place for ideas worth keeping.
+            </div>
+        </footer>
+    </div>
 
     <script src="../ezzzy6/server.js"></script>
+    <script src="../js/gate.js"></script>
     <script>
+        (function () {
+            const authWall = document.getElementById("authWall");
+            const continueRegister = document.getElementById("continueRegister");
+            const registerForm = document.getElementById("registerForm");
+
+            function lockPage() {
+                document.body.classList.add("auth-locked");
+                document.body.style.overflow = "hidden";
+                if (authWall) {
+                    authWall.classList.remove("hidden");
+                }
+            }
+
+            function unlockPage() {
+                document.body.classList.remove("auth-locked");
+                document.body.style.overflow = "";
+                if (authWall) {
+                    authWall.classList.add("hidden");
+                }
+            }
+
+            lockPage();
+
+            continueRegister.addEventListener("click", function () {
+                unlockPage();
+                if (registerForm) {
+                    registerForm.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+                const firstField = document.getElementById("fullName");
+                if (firstField) {
+                    firstField.focus();
+                }
+            });
+
+            document.addEventListener("keydown", function (event) {
+                if ((event.key === "Escape" || event.key === "Esc") && authWall && !authWall.classList.contains("hidden")) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+
+            document.addEventListener("click", function (event) {
+                if (authWall && !authWall.classList.contains("hidden") && event.target === authWall) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+        })();
+
         async function registerStudent(fullName, email, password) {
          const data = await apiRequest("/api/auth/register", {
              method: "POST",

@@ -61,7 +61,15 @@
     <script>
         async function renderPost() {
             const id = new URLSearchParams(window.location.search).get("id");
-            if (!id) return;
+            const articleBody = document.querySelector(".article-boby");
+
+            if (!id) {
+                articleBody.innerHTML = `
+                    <p>No post was selected.</p>
+                    <a href="../index.html" class="back-link">← All posts</a>
+                `;
+                return;
+            }
 
             try {
                 const post = await getPostById(id);
@@ -71,17 +79,26 @@
                 document.querySelector(".author-info p:last-child").textContent = post.createdAt
                     ? new Date(post.createdAt).toLocaleDateString()
                     : "";
-                document.querySelector(".article-boby").textContent = post.content || "";
+                articleBody.textContent = post.content || "";
                 if (post.imageUrl) {
                     document.querySelector(".hero-image").src = post.imageUrl;
                 }
                 document.title = post.title || "The Margin";
             } catch (error) {
-                document.querySelector(".article-boby").textContent = `Unable to load this post: ${error.message}`;
+                articleBody.innerHTML = `
+                    <p>Unable to load this post right now.</p>
+                    <button type="button" id="retryPost">Try again</button>
+                `;
+
+                const retryButton = document.getElementById("retryPost");
+                if (retryButton) {
+                    retryButton.addEventListener("click", renderPost, { once: true });
+                }
             }
         }
         renderPost();
     </script>
+    <script src="../js/gate.js"></script>
     <script src="../js/animations.js"></script>
 </body>
 </html>

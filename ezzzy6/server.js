@@ -48,17 +48,78 @@ async function apiRequest(endpoint, options = {}, authRequired = false) {
 }
 
 async function getAllPosts(page = 0, size = 10) {
-   return apiRequest(`/api/posts?page=${page}&size=${size}&_=${Date.now()}`);
+   const candidates = [
+      `/api/post?page=${page}&size=${size}&_=${Date.now()}`,
+      `/api/posts?page=${page}&size=${size}&_=${Date.now()}`
+   ];
+
+   let lastError;
+
+   for (const endpoint of candidates) {
+      try {
+         const pageData = await apiRequest(endpoint);
+         const posts = Array.isArray(pageData)
+            ? pageData
+            : Array.isArray(pageData?.content)
+              ? pageData.content
+              : Array.isArray(pageData?.posts)
+                ? pageData.posts
+                : [];
+
+         return posts
+            .filter(Boolean)
+            .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+      } catch (error) {
+         lastError = error;
+      }
+   }
+
+   throw lastError || new Error("Unable to load posts.");
 }
 
 async function getPostById(id) {
-   return apiRequest(`/api/posts/${encodeURIComponent(id)}`);
+   const candidates = [
+      `/api/post/${encodeURIComponent(id)}`,
+      `/api/posts/${encodeURIComponent(id)}`
+   ];
+
+   let lastError;
+
+   for (const endpoint of candidates) {
+      try {
+         return await apiRequest(endpoint);
+      } catch (error) {
+         lastError = error;
+      }
+   }
+
+   throw lastError || new Error(`Unable to load post ${id}.`);
 }
 
 async function createPost(post) {
+   let student = null;
+   try {
+      const storedStudent = localStorage.getItem("student");
+      student = storedStudent ? JSON.parse(storedStudent) : null;
+   } catch {
+      student = null;
+   }
+
+   const enrichedPost = {
+      ...post,
+      id: post.id || (typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `post-${Date.now()}`),
+      createdAt: post.createdAt || new Date().toISOString(),
+      status: post.status || "published",
+      isPublished: post.isPublished ?? true,
+      author: post.author || {
+         id: student?.id || student?._id || null,
+         fullName: student?.fullName || student?.name || "Unknown author"
+      }
+   };
+
    return apiRequest("/api/posts", {
       method: "POST",
-      body: JSON.stringify(post)
+      body: JSON.stringify(enrichedPost)
    }, true);
 }
 

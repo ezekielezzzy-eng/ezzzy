@@ -7,18 +7,46 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div>The Margin</div>
-        <nav>
-            <a href="ezzzy5/last.html">Post</a>
-            <a href="ezzzy 2/ezzzy/loggin.html" class="tag">Sign in</a>
-            <a href="ezzzy/reg.html" class="buttom">Get started</a>
-        </nav>
-    </header>
-    <div class="hero">
-        <p class="hero-card">
-            INDEPEDENT WRITING
-        </p>
+    <div id="gateOverlay" class="gate-overlay hidden">
+        <div class="gate-modal">
+            <p class="gate-label">Welcome to The Margin</p>
+            <h2>Choose how you want to continue.</h2>
+
+            <div class="gate-actions">
+                <button id="showRegisterPanel" type="button" class="action-btn primary">Register</button>
+                <a href="ezzzy 2/ezzzy/loggin.html" class="action-btn secondary">Sign Up</a>
+            </div>
+
+            <div id="registerPanel" class="gate-panel hidden">
+                <form id="gateForm" class="gate-form">
+                    <input id="gateFullName" type="text" placeholder="Full name" required>
+                    <input id="gateEmail" type="email" placeholder="Email" required>
+                    <input id="gatePassword" type="password" placeholder="Password" required>
+                    <button type="submit">Create account</button>
+                </form>
+            </div>
+
+            <p class="gate-toggle-text">
+                Already have an account?
+                <a href="ezzzy 2/ezzzy/loggin.html" class="gate-signin">Sign in</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="page-shell">
+        <header>
+            <div>The Margin</div>
+            <nav>
+                <a href="" onclick="alert('please login')">Post</a>
+                <a href="ezzzy 2/ezzzy/loggin.html" class="tag">Sign in</a>
+                <a href="ezzzy/reg.html" class="buttom">Get started</a>
+            </nav>
+        </header>
+
+        <div class="hero">
+            <p class="hero-card">
+                INDEPEDENT WRITING
+            </p>
         <h1 class="hero-text">
             ideas worth sitting with.
         </h1>
@@ -92,7 +120,7 @@
 
             <div class="article-card">
                 
-                <img src="/image/Image (On Cities That Reward Slowness) (2).png" alt="" class="card-image">
+                <img src="/image/Image (On Cities That Reward Slowness) (1).png"alt="image" class="card-image">
 
                 <h2 class="card-category">
                     Travel
@@ -106,7 +134,7 @@
                     Some cities are built for speed. Others reveal themselves only to those patient enough to walk every street at least once.
                 </p>
                 <div class="card-author">
-                    <img src="images/Image (Margot Ellison) (1).png" alt="">
+                    <img src="/image/Image (Margot Ellison) (1).png" alt="image">
                     <p>
                         Thomas Vael · 5 min
                     </p>
@@ -116,7 +144,7 @@
 
                             <div class="article-card">
                 
-                <img src="/image/BlogListing (2).png=" alt="" class="card-image">
+                <img src="/image/Image (The Surprising Ethics of Making Things).png"alt="image" class="card-image">
 
                 <h2 class="card-category">
                     Ideas
@@ -130,7 +158,7 @@
                     Every object you make is a small argument about how the world should be. The ethics of craft are hidden in plain sight.
                 </p>
                 <div class="card-author">
-                    <img src="/images/Image (Thomas Vael) (1).png" alt="">
+                    <img src="/image/Image (Thomas Vael) (1).png" alt="image">
                     <p>
                         Thomas Vael · 5 min
                     </p>
@@ -152,7 +180,10 @@
             A place for. ideas worth keeping.
         </p>
     </footer>
+    </div>
+
     <script src="ezzzy6/server.js"></script>
+    <script src="js/gate.js"></script>
     <script>
         async function renderPosts() { 
             const container = document.getElementById("postsList");
@@ -164,28 +195,49 @@
                                      .filter((post) => {
                      const status = String(post.status || "").toLowerCase();
                      return post.isPublished !== false && status !== "draft";
-                 });
+                 })
+                 .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
                  if (posts.length === 0) {
                      container.innerHTML = "<p>No posts yet.</p>";
                      return;
                     }
                       container.innerHTML = posts
-                       .map(
-                         (post) => `
-                          <article class="post-card"> 
-                            ${post.imageUrl ? `<img src="${escapeHtml(post.imageUrl)}" alt="">` :
-         ""} 
-                    <span class="category">${escapeHtml(post.category || "POST")}</span>
-                     <h2><a 
-        href="ezzzy4/post.html?id=${encodeURIComponent(post.id)}">${escapeHtml(post.title)}</a></h2>
-                    <p>${escapeHtml((post.content || "").slice(0, 150))}...</p> 
-                    <small>By ${escapeHtml(post.author?.fullName || "Unknown author")} · ${new 
-        Date(post.createdAt).toLocaleDateString()}</small>
-                </article>
-            `
-            ) 
-            .join("");
+                       .map((post) => {
+                         const title = escapeHtml(post.title || "Untitled post");
+                         const category = escapeHtml(post.category || "POST");
+                         const authorName = escapeHtml(post.author?.fullName || "Unknown author");
+                         const imageSrc = escapeHtml(post.imageUrl || "/image/BlogListing (1).png");
+                         const excerpt = escapeHtml((post.content || "").replace(/\s+/g, " ").trim().slice(0, 150));
+                         const createdDate = post.createdAt ? new Date(post.createdAt).toLocaleDateString("en-US", {
+                             month: "short",
+                             day: "numeric",
+                             year: "numeric"
+                         }) : "Recently";
+                         const readTime = Number(post.readTime) || 4;
+                         const initials = authorName
+                           .split(/\s+/)
+                           .filter(Boolean)
+                           .slice(0, 2)
+                           .map((part) => part.charAt(0).toUpperCase())
+                           .join("") || "M";
+
+                         return `
+                           <article class="article-card post-card">
+                             <img class="card-image post-card-image" src="${imageSrc}" alt="${title}">
+                             <h2 class="card-category">${category}</h2>
+                             <h1 class="card-title">
+                               <a class="card-link" href="ezzzy4/post.html?id=${encodeURIComponent(post.id)}">${title}</a>
+                             </h1>
+                             <p class="card-content">${excerpt}${(post.content || "").trim().length > 150 ? "..." : ""}</p>
+                             <div class="card-author">
+                               <div class="card-avatar">${initials}</div>
+                               <p>${authorName} · ${createdDate} · ${readTime} min read</p>
+                             </div>
+                           </article>
+                         `;
+                       })
+                       .join("");
                  } catch (err) {
                      container.innerHTML = `
                          <div class="posts-error" role="alert">

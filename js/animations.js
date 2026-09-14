@@ -5,34 +5,71 @@
     return;
   }
 
-  var style = document.createElement("style");
-  style.textContent = ""
-    + ".page-intro { opacity: 0; transform: translateY(8px); }"
-    + ".animations-ready .page-intro {"
-    + " opacity: 1; transform: translateY(0);"
-    + " transition: opacity 520ms ease, transform 520ms ease;"
-    + " transition-delay: var(--intro-delay, 0ms);"
-    + " }";
-  document.head.appendChild(style);
+  function applyIntroClasses() {
+    var selectors = [
+      ".hero-card",
+      ".hero-text",
+      ".hero-letter",
+      ".wel",
+      ".article-title",
+      ".e2",
+      ".form-header h1",
+      ".card-category",
+      ".card-title",
+      ".card-content",
+      ".card-author"
+    ];
 
-  var selectors = [
-    ".hero-card",
-    ".hero-text",
-    ".hero-letter",
-    ".wel",
-    ".article-title",
-    ".e2",
-    ".form-header h1"
-  ];
-
-  selectors.forEach(function (selector, index) {
-    document.querySelectorAll(selector).forEach(function (element) {
-      element.classList.add("page-intro");
-      element.style.setProperty("--intro-delay", Math.min(index * 70, 280) + "ms");
+    selectors.forEach(function (selector, index) {
+      document.querySelectorAll(selector).forEach(function (element) {
+        element.classList.add("intense-entrance");
+        element.style.setProperty("--intro-delay", Math.min(index * 70, 280) + "ms");
+      });
     });
-  });
 
+    document.querySelectorAll(".buttom, .btn-write, .btn-publish, .hero-card").forEach(function (element) {
+      element.classList.add("pulse-glow");
+    });
+
+    document.querySelectorAll(".article-card").forEach(function (element) {
+      element.classList.add("hover-lift", "reveal-on-scroll");
+    });
+  }
+
+  function revealOnScroll() {
+    var revealNodes = document.querySelectorAll(".reveal-on-scroll");
+
+    if (!revealNodes.length) {
+      return;
+    }
+
+    if ("IntersectionObserver" in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.18,
+        rootMargin: "0px 0px -6% 0px"
+      });
+
+      revealNodes.forEach(function (node) {
+        observer.observe(node);
+      });
+      return;
+    }
+
+    revealNodes.forEach(function (node) {
+      node.classList.add("is-visible");
+    });
+  }
+
+  applyIntroClasses();
   requestAnimationFrame(function () {
     document.documentElement.classList.add("animations-ready");
+    revealOnScroll();
   });
 })();

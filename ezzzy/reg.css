@@ -4,6 +4,127 @@
     box-sizing: border-box;
 }
 
+body {
+    background-color: #faf8f4;
+    color: #1a1610;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.page-wrap {
+    position: relative;
+    min-height: 100vh;
+}
+
+body.auth-locked .page-wrap {
+    filter: blur(1.2px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.auth-wall {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 22, 16, 0.48);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 50;
+}
+
+.auth-wall.hidden {
+    display: none;
+}
+
+.auth-modal {
+    width: min(100%, 500px);
+    background: #f7f4ef;
+    border: 1px solid #d9d2c5;
+    border-radius: 18px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(26, 22, 16, 0.16);
+}
+
+.auth-label {
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #b8651a;
+    margin-bottom: 8px;
+}
+
+.auth-modal h2 {
+    font-size: clamp(24px, 3vw, 36px);
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: #1a1610;
+}
+
+.auth-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.action-btn.primary {
+    border: none;
+    background: #1a1610;
+    color: #f7f4ef;
+    cursor: pointer;
+}
+
+.action-btn.secondary {
+    border: 1px solid #d9d2c5;
+    background: #ffffff;
+    color: #1a1610;
+}
+
+.auth-toggle-text {
+    font-size: 14px;
+    color: #7a7060;
+    text-align: center;
+}
+
+.auth-signin {
+    color: #1a1610;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .auth-modal {
+        padding: 24px 20px;
+    }
+
+    .auth-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .auth-wall {
+        padding: 16px;
+    }
+
+    .auth-modal {
+        width: 100%;
+    }
+}
+
 .navbar {
  width: 100%;
     margin: 0 auto;
