@@ -7,23 +7,6 @@
     <link rel="stylesheet" href="reg.css">
 </head>
 <body>
-    <div id="authWall" class="auth-wall" aria-modal="true" role="dialog">
-        <div class="auth-modal">
-            <p class="auth-label">Welcome to The Margin</p>
-            <h2>Choose how you want to continue.</h2>
-
-            <div class="auth-actions">
-                <button id="continueRegister" type="button" class="action-btn primary">Register</button>
-                <a href="../ezzzy%202/ezzzy/loggin.html" class="action-btn secondary">Sign Up</a>
-            </div>
-
-            <p class="auth-toggle-text">
-                Already have an account?
-                <a href="../ezzzy%202/ezzzy/loggin.html" class="auth-signin">Sign in</a>
-            </p>
-        </div>
-    </div>
-
     <div class="page-wrap">
         <header class="navbar">
         <div class="logo">the Margin</div>
@@ -58,57 +41,8 @@
     </div>
 
     <script src="../ezzzy6/server.js"></script>
-    <script src="../js/gate.js"></script>
+    <script src="animations.js"></script>
     <script>
-        (function () {
-            const authWall = document.getElementById("authWall");
-            const continueRegister = document.getElementById("continueRegister");
-            const registerForm = document.getElementById("registerForm");
-
-            function lockPage() {
-                document.body.classList.add("auth-locked");
-                document.body.style.overflow = "hidden";
-                if (authWall) {
-                    authWall.classList.remove("hidden");
-                }
-            }
-
-            function unlockPage() {
-                document.body.classList.remove("auth-locked");
-                document.body.style.overflow = "";
-                if (authWall) {
-                    authWall.classList.add("hidden");
-                }
-            }
-
-            lockPage();
-
-            continueRegister.addEventListener("click", function () {
-                unlockPage();
-                if (registerForm) {
-                    registerForm.scrollIntoView({ behavior: "smooth", block: "start" });
-                }
-                const firstField = document.getElementById("fullName");
-                if (firstField) {
-                    firstField.focus();
-                }
-            });
-
-            document.addEventListener("keydown", function (event) {
-                if ((event.key === "Escape" || event.key === "Esc") && authWall && !authWall.classList.contains("hidden")) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-            });
-
-            document.addEventListener("click", function (event) {
-                if (authWall && !authWall.classList.contains("hidden") && event.target === authWall) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-            });
-        })();
-
         async function registerStudent(fullName, email, password) {
          const data = await apiRequest("/api/auth/register", {
              method: "POST",

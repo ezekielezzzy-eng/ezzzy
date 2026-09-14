@@ -7,37 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="gateOverlay" class="gate-overlay hidden">
-        <div class="gate-modal">
-            <p class="gate-label">Welcome to The Margin</p>
-            <h2>Choose how you want to continue.</h2>
-
-            <div class="gate-actions">
-                <button id="showRegisterPanel" type="button" class="action-btn primary">Register</button>
-                <a href="ezzzy 2/ezzzy/loggin.html" class="action-btn secondary">Sign Up</a>
-            </div>
-
-            <div id="registerPanel" class="gate-panel hidden">
-                <form id="gateForm" class="gate-form">
-                    <input id="gateFullName" type="text" placeholder="Full name" required>
-                    <input id="gateEmail" type="email" placeholder="Email" required>
-                    <input id="gatePassword" type="password" placeholder="Password" required>
-                    <button type="submit">Create account</button>
-                </form>
-            </div>
-
-            <p class="gate-toggle-text">
-                Already have an account?
-                <a href="ezzzy 2/ezzzy/loggin.html" class="gate-signin">Sign in</a>
-            </p>
-        </div>
-    </div>
-
     <div class="page-shell">
         <header>
             <div>The Margin</div>
             <nav>
-                <a href="" onclick="alert('please login')">Post</a>
+                <a href="#postsList">Post</a>
                 <a href="ezzzy 2/ezzzy/loggin.html" class="tag">Sign in</a>
                 <a href="ezzzy/reg.html" class="buttom">Get started</a>
             </nav>
@@ -183,7 +157,6 @@
     </div>
 
     <script src="ezzzy6/server.js"></script>
-    <script src="js/gate.js"></script>
     <script>
         async function renderPosts() { 
             const container = document.getElementById("postsList");
