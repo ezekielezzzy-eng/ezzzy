@@ -12,8 +12,9 @@
             <div>The Margin</div>
             <nav>
                 <a href="#postsList">Post</a>
-                <a href="ezzzy 2/ezzzy/loggin.html" class="tag">Sign in</a>
-                <a href="ezzzy/reg.html" class="buttom">Get started</a>
+                <a id="writeLink" href="ezzzy5/last.html" class="buttom hidden">Write</a>
+                <a id="signinLink" href="ezzzy 2/ezzzy/loggin.html" class="tag">Sign in</a>
+                <a id="getStartedLink" href="ezzzy/reg.html" class="buttom">Get started</a>
             </nav>
         </header>
 
@@ -158,6 +159,23 @@
 
     <script src="ezzzy6/server.js"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const isLoggedIn = localStorage.getItem("isLoggedIn") === "true" || !!localStorage.getItem("token");
+            const writeLink = document.getElementById("writeLink");
+            const signinLink = document.getElementById("signinLink");
+            const getStartedLink = document.getElementById("getStartedLink");
+
+            if (isLoggedIn) {
+                if (signinLink) signinLink.classList.add("hidden");
+                if (getStartedLink) getStartedLink.classList.add("hidden");
+                if (writeLink) writeLink.classList.remove("hidden");
+            } else {
+                if (writeLink) writeLink.classList.add("hidden");
+                if (signinLink) signinLink.classList.remove("hidden");
+                if (getStartedLink) getStartedLink.classList.remove("hidden");
+            }
+        });
+
         async function renderPosts() { 
             const container = document.getElementById("postsList");
             container.innerHTML = "Loading posts...";

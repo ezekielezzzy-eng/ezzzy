@@ -3,6 +3,10 @@
     padding: 0;
 }
 
+.hidden {
+    display: none !important;
+}
+
 header {
     display: flex;
     justify-content: space-between;

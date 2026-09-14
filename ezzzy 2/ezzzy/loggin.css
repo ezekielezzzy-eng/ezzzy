@@ -3,7 +3,18 @@
     padding: 0;
     box-sizing: border-box;
 }
-
+.buttom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 108px;
+    height: 32px;
+    padding: 6px 16px;
+    border-radius: 4px;
+    background-color: #1a1610;
+    color: #f7f4ef;
+    text-align: center;
+}
 .navbar {
     width: 100%;
     margin: 0 auto;
