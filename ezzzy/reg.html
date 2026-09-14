@@ -10,9 +10,9 @@
     <header class="navbar">
     <div class="logo">the Margin</div>
     <nav class="na">
-        <a href="../ezzzy5/last.html">Posts</a>
-        <a href="../ezzzy 2/loggin.html">Sign in</a>
-        <button href="../ezzzy/reg.html">Get started</button>
+        <a href="../index.html">Posts</a>
+        <a href="../ezzzy 2/ezzzy/loggin.html">Sign in</a>
+        <a href="../ezzzy/reg.html">Get started</a>
     </nav>
     </header>
     
@@ -43,7 +43,7 @@
         async function registerStudent(fullName, email, password) {
          const data = await apiRequest("/api/auth/register", {
              method: "POST",
-              body: JSON.stringify({ fullName, email, password, department: "CS", level:"300" }),
+              body: JSON.stringify({ fullName, email, password, department: "Computer science", level: "300" }),
               }); // data = { token, tokenType, student: {...} } 
                localStorage.setItem("token", data.token);
                localStorage.setItem("student", JSON.stringify(data.student));
@@ -56,22 +56,23 @@
          try {
 
             document.getElementById("LOGING-IN").textContent = "Registering...";
-            document.getElementById("LOGING-IN").ariaDisabled = true;
+            document.getElementById("LOGING-IN").disabled = true;
          const student = await registerStudent(
                 document.getElementById("fullName").value,
                 document.getElementById("email").value,
                 document.getElementById("password").value
             );
                   alert(`Welcome, ${student.fullName}! You're now logged in.`);
-                   window.location.href = "../ezzzy7/ezzzy.html"; // go to the homepage
+                   window.location.href = "../index.html"; // go to the homepage
                     } catch (err) {
                     alert(err.message); // e.g. "A student with this email already exists" 
                     } finally{
                         document.getElementById("LOGING-IN").textContent= "create account";
-                        document.getElementById("LOGING-IN").ariaDisabled=false;
+                        document.getElementById("LOGING-IN").disabled = false;
                     } 
                 }); 
     </script>
+    <script src="../js/animations.js"></script>
 </body>
 </html>
 

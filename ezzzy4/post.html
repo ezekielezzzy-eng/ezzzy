@@ -38,7 +38,7 @@
         <p>The best technical writers I know are engineers who learned to distrust their first draft without hating it. They fix what's broken without confusing "broken" with "not yet finished."</p>
         </article>
 
-        <a href="#posts" class="back-link">← All posts</a>
+        <a href="../index.html" class="back-link">← All posts</a>
         <section class="related-section">
 
             <h2>More from Thomas Vael</h2>
@@ -57,5 +57,31 @@
         <div class="footer-log">The Margin</div>
         <div class="footer-text">a place for ideas worth keeping.</div>
     </footer>
+    <script src="../ezzzy6/server.js"></script>
+    <script>
+        async function renderPost() {
+            const id = new URLSearchParams(window.location.search).get("id");
+            if (!id) return;
+
+            try {
+                const post = await getPostById(id);
+                document.querySelector(".category").textContent = post.category || "POST";
+                document.querySelector(".article-title").textContent = post.title || "Untitled post";
+                document.querySelector(".author-info p").textContent = post.author?.fullName || "Unknown author";
+                document.querySelector(".author-info p:last-child").textContent = post.createdAt
+                    ? new Date(post.createdAt).toLocaleDateString()
+                    : "";
+                document.querySelector(".article-boby").textContent = post.content || "";
+                if (post.imageUrl) {
+                    document.querySelector(".hero-image").src = post.imageUrl;
+                }
+                document.title = post.title || "The Margin";
+            } catch (error) {
+                document.querySelector(".article-boby").textContent = `Unable to load this post: ${error.message}`;
+            }
+        }
+        renderPost();
+    </script>
+    <script src="../js/animations.js"></script>
 </body>
 </html>

@@ -10,9 +10,9 @@
     <header>
         <div>The Margin</div>
         <nav>
-            <a href="../ezzzy5/last.html">Post</a>
-            <a href="../ezzzy 2/loggin.html" class="tag">Sign in</a>
-            <button href="../ezzzy/reg.html" class="buttom" >Get started</button>
+            <a href="ezzzy5/last.html">Post</a>
+            <a href="ezzzy 2/ezzzy/loggin.html" class="tag">Sign in</a>
+            <a href="ezzzy/reg.html" class="buttom">Get started</a>
         </nav>
     </header>
     <div class="hero">
@@ -142,6 +142,8 @@
         </div>
     </section>
     
+    <div id="postsList" class="articles"></div>
+
     <footer class="footer-log">
         <div class="text">
             The margin
@@ -150,42 +152,50 @@
             A place for. ideas worth keeping.
         </p>
     </footer>
-    <script  src="../ezzzy6/server.js"></script>
+    <script src="ezzzy6/server.js"></script>
     <script>
-        <div id="postsList"></div> 
-        
         async function renderPosts() { 
             const container = document.getElementById("postsList");
             container.innerHTML = "Loading posts...";
             
             try {
                  const page = await getAllPosts(0, 10);
-                
-                 if (page.content.length === 0) {
+                                 const posts = (Array.isArray(page) ? page : page && Array.isArray(page.content) ? page.content : [])
+                                     .filter((post) => {
+                     const status = String(post.status || "").toLowerCase();
+                     return post.isPublished !== false && status !== "draft";
+                 });
+
+                 if (posts.length === 0) {
                      container.innerHTML = "<p>No posts yet.</p>";
                      return;
                     }
-                      container.innerHTML = page.content
+                      container.innerHTML = posts
                        .map(
                          (post) => `
                           <article class="post-card"> 
                             ${post.imageUrl ? `<img src="${escapeHtml(post.imageUrl)}" alt="">` :
          ""} 
-                    <span class="category">${escapeHtml(post.category)}</span>
+                    <span class="category">${escapeHtml(post.category || "POST")}</span>
                      <h2><a 
-        href="post.html?id=${post.id}">${escapeHtml(post.title)}</a></h2>
-                    <p>${escapeHtml(post.content.slice(0, 150))}...</p> 
-                    <small>By ${escapeHtml(post.author.fullName)} · ${new 
+        href="ezzzy4/post.html?id=${encodeURIComponent(post.id)}">${escapeHtml(post.title)}</a></h2>
+                    <p>${escapeHtml((post.content || "").slice(0, 150))}...</p> 
+                    <small>By ${escapeHtml(post.author?.fullName || "Unknown author")} · ${new 
         Date(post.createdAt).toLocaleDateString()}</small>
                 </article>
             `
             ) 
             .join("");
-         } catch (err) {
-           container.innerHTML = `<p>Failed to load posts: ${err.message}</p>`;
+                 } catch (err) {
+                     container.innerHTML = `
+                         <div class="posts-error" role="alert">
+                             <p>More essays are temporarily unavailable.</p>
+                             <button type="button" id="retryPosts">Try again</button>
+                         </div>`;
+                     document.getElementById("retryPosts").addEventListener("click", renderPosts, { once: true });
          } 
 
-        } renderPosts();
+         } renderPosts();
          // Always escape user-supplied text before inserting it as HTML,
          //  // so a post title/content can never inject a <script> tag into your page. 
         function escapeHtml(str) {
@@ -194,6 +204,7 @@
               return div.innerHTML;
              }
     </script>
+    <script src="js/animations.js"></script>
 
 
 </body>

@@ -11,7 +11,7 @@
   <header class="navbar">
     <div class="logo">The Margin</div>
     <nav class="nav-links">
-      <a href="#posts">Posts</a>
+      <a href="../index.html">Posts</a>
       <button href="#write" class="btn-write">Write</button>
       <a href="/image/Image (Margot Ellison) (1).png" alt="image"><img src="/image/Image (Margot Ellison) (1).png" alt="image"></a>
     </nav>
@@ -23,7 +23,7 @@
       <p class="subtitle">Share an idea, an essay, a reflection.</p>
     </div>
 
-    <form class="post-form">
+    <form class="post-form" id="postForm">
       <div class="form-group">
         <label for="title">TITLE</label>
         <input type="text" id="title" placeholder="Something worth reading">
@@ -70,6 +70,46 @@
     <div class="footer-tagline">A place for ideas worth keeping.</div>
     <a href="#" class="sign-out">Sign out</a>
   </footer>
+  <script src="../ezzzy6/server.js"></script>
+  <script>
+    document.getElementById("postForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const button = document.querySelector(".btn-publish");
+      const originalText = button.textContent;
+      const content = document.getElementById("content").value.trim();
+      const title = document.getElementById("title").value.trim();
+      if (!title || !content) {
+        alert("Title and content are required.");
+        return;
+      }
+      button.disabled = true;
+      button.textContent = "Publishing...";
+      try {
+        await createPost({
+          title,
+          content,
+          excerpt: document.getElementById("excerpt").value.trim(),
+          category: document.getElementById("category").value,
+          readTime: Number(document.getElementById("read-time").value) || 1
+        });
+        alert("Post published.");
+        window.location.href = "../index.html";
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    });
+
+    document.querySelector(".sign-out").addEventListener("click", (event) => {
+      event.preventDefault();
+      localStorage.removeItem("token");
+      localStorage.removeItem("student");
+      window.location.href = "../ezzzy 2/loggin.html";
+    });
+  </script>
+  <script src="../js/animations.js"></script>
 
 </body>
 </html>

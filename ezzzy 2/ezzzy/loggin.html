@@ -8,11 +8,11 @@
 </head>
 <body>
     <header class="navbar">
-    <div class="logo">the Margin</div>
+    <a class="logo" href="../../index.html">the Margin</a>
     <nav class="na">
-        <a href="../ezzzy5/last.html">Posts</a>
-        <a href="#Sign in">Sign in</a>
-        <button href="#get started">Get started</button>
+        <a href="../../index.html">Posts</a>
+        <a href="../../index.html">Home</a>
+        <a href="../../ezzzy/reg.html">Get started</a>
     </nav>
     </header>
     
@@ -25,7 +25,7 @@
                     <label class="Password">Password</label>
                     <input id="password" type="Password" placeholder="12345678">
                     <button id="LOGING-IN" type="submit">LOGIN</button>
-                    <label class="type">already have an account? <a class="sign-up" href="">sign-up </a></label>
+                    <label class="type">Need an account? <a class="sign-up" href="../../ezzzy/reg.html">sign-up</a></label>
                 </form>
 
              </section>
@@ -35,7 +35,7 @@
             a place for ideas worth keeping.
         </div>
     </footer>
-    <script src="../ezzzy6/server.js"></script>
+    <script src="../../ezzzy6/server.js"></script>
     <script>
     async function loginStudent(email, password) {
          const data = await apiRequest("/api/auth/login", { 
@@ -54,7 +54,7 @@
                   try { 
 
                     document.getElementById("LOGING-IN").textContent = "LOGING-IN...";
-            document.getElementById("LOGING-IN").ariaDisabled = true;
+            document.getElementById("LOGING-IN").disabled = true;
                    
                    console.log("Logging in...")
 
@@ -62,15 +62,16 @@
                         document.getElementById("email").value,
                         document.getElementById("password").value
                      );
-                        window.location.href = "../ezzzy7/ezzzy.html";
+                        window.location.href = "../../index.html";
                      } catch (err) { 
                         alert(err.message); // e.g. "Invalid email or password"
                  } finally {
                  document.getElementById("LOGING-IN").textContent = "LOGIN";
-                 document.getElementById("LOGING-IN").ariaDisabled = false;
+                 document.getElementById("LOGING-IN").disabled = false;
                  }
                 });
     </script>
- </html>
- </body>
+    <script src="../../js/animations.js"></script>
+</body>
+</html>
 
